@@ -18,7 +18,7 @@ class RegistrationDataValues {
 
     /*Email*/
     String emailValid = "krisota123456789@gmail.com", emailManyDotsAddress = "Krisota@mail.com.uk",
-    emailSymbols = "$kr!sota$.mail.ru"; /*this field has no max length*/
+    emailSymbols = "kri-so_ta.mail.ru"; /*this field has no max length*/
 
     /*Phone number*/
     String phoneValidMobile = "9178067522", phoneValidHome = "4994567853";
