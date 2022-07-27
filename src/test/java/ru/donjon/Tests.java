@@ -1,5 +1,6 @@
 package ru.donjon;
 
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class Tests extends PageObjectRegistration {
         open(registrationPageUrl);
         last_nameField.sendKeys(onlyNumbers);
         String newValue = last_nameField.getText();
-        Assert.assertEquals(newValue,"",newValue);
+        Assert.assertEquals("Last name field","",newValue);
     }
 
     @Test
@@ -78,31 +79,43 @@ public class Tests extends PageObjectRegistration {
         password.sendKeys(passwordValidComplicated);
         password_repeat.sendKeys(passwordValidComplicated);
         if (submitButtonEnable() == true) {
-            submitButton.click();
             Assert.assertTrue(title.equals("Завершение регистрации"));
             System.out.println("User could register without clicking 'I am not a robot' checkbox");
-
-        } else {
-            System.out.println("Submit button is not interactive.");
-
         }
+
     }
 
     @Test
-    @Description("User can't register without filling all the requared fields")
+    @Description("User can't register without filling all the required fields")
     public void userCanNotRegisterWithoutFillingRequaredFilds() {
         open(registrationPageUrl);
         confidentialPolicy.submit();
-        iAmNotRobot.submit();
+        //iAmNotRobot.submit();
         if (submitButtonEnable() == true) {
-            submitButton.click();
             Assert.assertTrue(title.equals("Завершение регистрации"));
             System.out.println("User could register without filling all of the required fields");
-
-        } else {
-            System.out.println("Submit button is not interactive.");
+        }else{
+            System.out.println("User could not register, but the Submit button was interactive");
         }
     }
-
+     @Test
+     @Description ("User can't register with invalid email adres (all other requared fields filled with valid data)." +
+             "And 'Я прочитал(-а) 'Политику конфиденциальности' и согласен(-на) с ней' checkbox." +
+             "and 'Я не работ' checkbox are clicked). An Error alert window is displayed")
+     public void emailErrorAlert() {
+         open(registrationPageUrl);
+         email.sendKeys(simbols);
+         last_nameField.sendKeys(lastNameValid);
+         nameField.sendKeys(nameValid);
+         phoneNumber.sendKeys(phoneValidMobile);
+         password.sendKeys(passwordValidComplicated);
+         password_repeat.sendKeys(passwordValidComplicated);
+         confidentialPolicy.submit();
+         //iAmNotRobot.submit(); /*Here I am stuck now. */
+         submitButton.submit();
+         String txt;
+         txt = getErrorText();
+         Assert.assertEquals("Error warning", txt, "Неверно заполнен адрес электронной почты!");
+     }
 }
 

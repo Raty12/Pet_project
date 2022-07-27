@@ -1,5 +1,6 @@
 package ru.donjon;
 
+import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import static com.codeborne.selenide.Selenide.*;
@@ -48,10 +49,27 @@ public class PageObjectRegistration extends RegistrationDataValues {
     /*Check if the submit button is enable, before clicking it*/
     public boolean submitButtonEnable() {
         if (submitButton.isEnabled()) {
+            submitButton.click();
             return true;
         } else {
+            System.out.println("Submit button is not interactive.");
             return false;
         }
+    }
+
+    /*Extracting text from the alert error warning*/
+
+    public String getErrorText() {
+
+        String txt = Selenide.switchTo().alert().getText();
+        System.out.println("The text is - " +txt);
+        return String.valueOf(txt);
+    }
+
+    /*Shut down the alert error warning*/
+
+    public void shutDownAlert() {
+        Selenide.switchTo().alert().accept();
     }
  }
 
