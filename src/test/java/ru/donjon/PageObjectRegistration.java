@@ -2,7 +2,14 @@ package ru.donjon;
 
 import com.codeborne.selenide.Selenide;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.v103.network.model.Cookie;
+
+import java.sql.Date;
+
 import static com.codeborne.selenide.Selenide.*;
 
 public class PageObjectRegistration extends RegistrationDataValues {
@@ -27,7 +34,7 @@ public class PageObjectRegistration extends RegistrationDataValues {
 
     /*checkboxes*/
     WebElement newsletter = $(By.id("newsletter"));
-    WebElement iAmNotRobot = $(By.className("recaptcha-checkbox-checkmark"));
+    WebElement iAmNotRobot = $("[class=\"recaptcha-checkbox-checkmark\"]");
     WebElement confidentialPolicy = $(By.id("politika"));
 
     /*button*/
@@ -71,5 +78,17 @@ public class PageObjectRegistration extends RegistrationDataValues {
     public void shutDownAlert() {
         Selenide.switchTo().alert().accept();
     }
+
+    /*Trying to deal with ReCapcha*/
+
+    // Создаем cookie
+    /*public void sendCookies() {
+        Cookie COOKIE = new Cookie("searchuid", "7872272821650056225", "\t.mail.ru", "/", new Date("2032-07-23T21:18:35.210Z"));
+        ChromeOptions options = null;
+        // Создаем браузер
+        WebDriver driver = new ChromeDriver(options);
+// Добавляем cookie в браузер
+        driver.manage().addCookie(COOKIE);
+    }*/
  }
 

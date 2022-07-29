@@ -4,6 +4,10 @@ import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Description;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 import static com.codeborne.selenide.Selenide.*;
 import static jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle.title;
 
@@ -24,6 +28,8 @@ public class Tests extends PageObjectRegistration {
         password.sendKeys(passwordValidComplicated);
         password_repeat.sendKeys(passwordValidComplicated);
         confidentialPolicy.submit();
+        Selenide.switchTo().alert().dismiss();
+
         iAmNotRobot.submit(); /*Here I am stuck now. */
         submitButton.submit();
         Assert.assertTrue(title.equals("Завершение регистрации"));
@@ -117,5 +123,22 @@ public class Tests extends PageObjectRegistration {
          txt = getErrorText();
          Assert.assertEquals("Error warning", txt, "Неверно заполнен адрес электронной почты!");
      }
+     @Test
+    @Description ("User can't register, when values in fields 'password' and 'repeat password' did not match")
+    public void passwordAndRepeatPasswordDoNotMatch (){
+         open(registrationPageUrl);
+         email.sendKeys(emailValid);
+         last_nameField.sendKeys(lastNameValid);
+         nameField.sendKeys(nameValid);
+         phoneNumber.sendKeys(phoneValidMobile);
+         password.sendKeys(passwordValidComplicated);
+         password_repeat.sendKeys(passwordValidSimple);
+         confidentialPolicy.submit();
+         //iAmNotRobot.submit(); /*Here I am stuck now. */
+         submitButton.submit();
+         String txt;
+         txt = getErrorText();
+         Assert.assertEquals("Error warning", "Поля \"Ваш пароль\" и \"Повторите пароль\" должны иметь одинаковые значения", txt);
+     }/*for now this test fails, because I still can't find a way to avoid Capcha, and the alert 'I am not robot' shows before password error alert*/
 }
 
